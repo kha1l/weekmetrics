@@ -515,3 +515,20 @@ class DataExportDay:
             }
         }
         self.save(orders_data)
+
+    def statistic_rest(self):
+        delta_days = {
+            'day': 0,
+            'week': 6,
+        }
+        orders_data = {
+            'app_share': {
+                'link': f'https://officemanager.dodopizza.{self.code}/Reports/RestaurantAppShare/Export',
+                'data': {
+                    "unitsIds": self.rest,
+                    "beginDate": self.date_end - timedelta(days=delta_days[self.tps]),
+                    "endDate": self.date_end
+                }
+            }
+        }
+        self.save(orders_data)

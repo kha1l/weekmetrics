@@ -82,7 +82,7 @@ class Database:
                     action50: float, action60: float, action49: float, lunch: float,
                     proc_lunch: float, stop: timedelta, stop_cause: str, stop_prod: int,
                     list_prod: str, stop_ing: int, list_ing: str, staff: str,
-                    couriers: str, form: str, check: int):
+                    couriers: str, form: str, check: int, ord_rest: int, ord_app: int, perc_app: float):
         sql = '''
             INSERT INTO week (ordersDay, restId, restName, revenue, revenueRest, 
                 revenueDelivery, revenuePickup, ordersDelivery, workKitchen, workExtra, 
@@ -96,10 +96,10 @@ class Database:
                 percentRefusal, action50, action60, action49, lunch, percentLunch, 
                 stopSelling, stopCause, stopProduct, stopCauseProduct, stopIngredient, 
                 stopCauseIngredient, staffKitchen, staffCouriers, formResponse, 
-                checkDelivery) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, 
+                checkDelivery, ordersRest, ordersAppRest, percentAppRest) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, 
                 %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, 
                 %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, 
-                %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
         '''
         parameters = (dt, rest_id, rest_name, rev, rev_r, rev_d, rev_p, ord_del,
                       act_time, ex_time, avg_m, max_m, avg_k, prod, pr, t_rest,
@@ -109,7 +109,7 @@ class Database:
                       prem_kitchen, train_s, d_cost, s_couriers, prem_couriers, one_del,
                       order_ref, proc_ref, action50, action60, action49, lunch,
                       proc_lunch, stop, stop_cause, stop_prod, list_prod, stop_ing,
-                      list_ing, staff, couriers, form, check)
+                      list_ing, staff, couriers, form, check, ord_rest, ord_app, perc_app)
         return self.execute(sql, parameters=parameters, commit=True)
 
     def update_metrics(self, dt: date, rest_id: int, rest_name: str, rev: int, rev_r: int,
@@ -125,7 +125,7 @@ class Database:
                        action50: float, action60: float, action49: float, lunch: float,
                        proc_lunch: float, stop: timedelta, stop_cause: str, stop_prod: int,
                        list_prod: str, stop_ing: int, list_ing: str, staff: str,
-                       couriers: str, form: str, check: int):
+                       couriers: str, form: str, check: int, ord_rest: int, ord_app: int, perc_app: float):
         sql = '''
             UPDATE week SET ordersDay=%s, restId=%s, restName=%s, revenue=%s, revenueRest=%s, 
                 revenueDelivery=%s, revenuePickup=%s, ordersDelivery=%s, workKitchen=%s, 
@@ -140,7 +140,8 @@ class Database:
                 refusal=%s, percentRefusal=%s, action50=%s, action60=%s, action49=%s, 
                 lunch=%s, percentLunch=%s, stopSelling=%s, stopCause=%s, stopProduct=%s, 
                 stopCauseProduct=%s, stopIngredient=%s, stopCauseIngredient=%s, 
-                staffKitchen=%s, staffCouriers=%s, formResponse=%s, checkDelivery=%s)
+                staffKitchen=%s, staffCouriers=%s, formResponse=%s, checkDelivery=%s,
+                ordersRest=%s, ordersAppRest=%s, percentAppRest=%s
             WHERE ordersDay=%s and restId=%s;
         '''
         parameters = (dt, rest_id, rest_name, rev, rev_r, rev_d, rev_p, ord_del,
@@ -151,5 +152,5 @@ class Database:
                       prem_kitchen, train_s, d_cost, s_couriers, prem_couriers, one_del,
                       order_ref, proc_ref, action50, action60, action49, lunch,
                       proc_lunch, stop, stop_cause, stop_prod, list_prod, stop_ing,
-                      list_ing, staff, couriers, form, check, dt, rest_id)
+                      list_ing, staff, couriers, form, check, ord_rest, ord_app, perc_app, dt, rest_id)
         return self.execute(sql, parameters=parameters, commit=True)

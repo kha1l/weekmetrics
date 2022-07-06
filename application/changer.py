@@ -165,15 +165,21 @@ class Changer:
             productivity = 0
         except KeyError:
             productivity = 0
+        except ValueError:
+            productivity = 0
 
         try:
             order_per_hour = float(round(df['Кол-во заказов на курьера в час'].mean(), 2))
         except KeyError:
             order_per_hour = 0
+        except ValueError:
+            order_per_hour = 0
 
         try:
             product_on_hour = float(round(df['Продуктов на человека в час'].mean(), 2))
         except KeyError:
+            product_on_hour = 0
+        except ValueError:
             product_on_hour = 0
 
         return productivity, product_on_hour, order_per_hour
@@ -305,7 +311,7 @@ class Changer:
 
         try:
             df = df.loc[df['Статус заказа'] == 'Отказ']
-            refusal = df['Сумма заказа'].sum()
+            refusal = float(df['Сумма заказа'].sum())
         except (IndexError, KeyError):
             refusal = 0
 
@@ -359,7 +365,7 @@ class Changer:
         except IndexError:
             total_49 = 0
 
-        return float(total_50), float(total_60), float(total_49), app_cert
+        return float(total_50), float(total_60), float(total_49), int(app_cert)
 
     def change_salary(self, name, revenue, revenue_del, orders):
         db = Database()
@@ -505,8 +511,10 @@ class Changer:
     def change_average_check(self):
         df = self.obj.df_check
         try:
-            check = float(df['Средний чек'].sum())
+            check = int(df['Средний чек'].mean())
         except KeyError:
+            check = 0
+        except ValueError:
             check = 0
         return check
 
@@ -534,3 +542,22 @@ class Changer:
         courier = stf[1]
         form = stf[2]
         return kitchen, courier, form
+
+    def change_rest_orders(self):
+        df = self.obj.df_rest_orders
+        try:
+            case = int(df.iloc[0]['Заказов на кассе'])
+            app = int(df.iloc[0]['Заказов в моб. приложении'])
+        except KeyError:
+            case = 0
+            app = 0
+        except IndexError:
+            case = 0
+            app = 0
+
+        all_orders = case + app
+        try:
+            perc_app = round(float(app / all_orders * 100), 2)
+        except ZeroDivisionError:
+            perc_app = 0
+        return all_orders, app, perc_app

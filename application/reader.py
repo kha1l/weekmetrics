@@ -49,6 +49,7 @@ class Reader(ReadFile):
     df_rating_client = None
     df_rating_couriers = None
     staff = None
+    df_rest_orders = None
 
     def read_df(self):
         self.df_rev = self.open_file('revenue', 17)
@@ -68,5 +69,6 @@ class Reader(ReadFile):
         self.df_lunch = self.open_file('lunch', 5)
         self.df_check = self.open_file('average_check', 7)
         self.df_rating_couriers = self.open_file('rating', 4)
+        self.df_rest_orders = self.open_file('app_share', 0)
         self.df_rating_client = pd.read_json('https://publicapi.dodois.io/ru/api/v1/ratings')
         self.staff = self.open_txt()

@@ -8,7 +8,7 @@ from datetime import date
 def work(group: str, tps: str):
     db = Database()
     users = db.get_users(group)
-    dt = DataWork(date(2022, 6, 5)).set_date()
+    dt = DataWork(date_end=date(2022, 7, 3)).set_date()
     for user in users:
         line = db.get_line(dt, user[1])
         cls_df = Reader(user[0], tps)
@@ -36,6 +36,7 @@ def work(group: str, tps: str):
         rating_client = change.change_rating_client(user[2])
         rating_couriers = change.change_rating_couriers()
         kitchen, courier, form = change.change_staff()
+        orders_rest, app, perc_app = change.change_rest_orders()
         if len(line) == 0:
             db.add_metrics(dt, user[1], user[0], revenue, revenue_rest, revenue_delivery, revenue_pickup,
                            delivery_orders, time_kitchen, extra, avg_manager, max_manager, avg_kitchen,
@@ -45,7 +46,7 @@ def work(group: str, tps: str):
                            rating_client, kit_cost, salary_k, salary_pk, salary_t, del_cost, salary_c, salary_pc,
                            total_one, refusal, perc_refusal, act50, act60, act49, lunch, perc_lunch, stop_duration,
                            stop_cause, product_stop, line_product, ingredient, line_ingredient, kitchen, courier,
-                           form, check)
+                           form, check, orders_rest, app, perc_app)
         else:
             db.update_metrics(dt, user[1], user[0], revenue, revenue_rest, revenue_delivery, revenue_pickup,
                               delivery_orders, time_kitchen, extra, avg_manager, max_manager, avg_kitchen,
@@ -55,4 +56,5 @@ def work(group: str, tps: str):
                               rating_client, kit_cost, salary_k, salary_pk, salary_t, del_cost, salary_c, salary_pc,
                               total_one, refusal, perc_refusal, act50, act60, act49, lunch, perc_lunch, stop_duration,
                               stop_cause, product_stop, line_product, ingredient, line_ingredient, kitchen, courier,
-                              form, check)
+                              form, check, orders_rest, app, perc_app)
+        print(user[0])

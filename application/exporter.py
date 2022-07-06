@@ -7,7 +7,7 @@ from datetime import date
 
 def exporter(group: str, tps: str):
     db = Database()
-    dt = DataWork(date(2022, 6, 5)).set_date()
+    dt = DataWork(date_end=date(2022, 7, 3)).set_date()
     users = db.get_users(group)
     for user in users:
         data = DataExportDay(dt, user[0], tps)
@@ -30,5 +30,5 @@ def exporter(group: str, tps: str):
         data.average_check()
         data.staff()
         data.rating()
-        print(dt, user[0])
-        time.sleep(15)
+        data.statistic_rest()
+        time.sleep(10)
